@@ -25,6 +25,7 @@ python run.py -o $PWD/example/orders.csv -b $PWD/example/barcodes.csv
  - To show top users use `-t 5` with a integer as the amount for the top customers.
  - The unused barcodes are being showed both in the STDOUT and the log level.
  - Please find the log file in the project root `merge.log` for debug and error logs.
+ - If not specify, a file name `result.csv` will be generate. you can use the `-j` flag for having a JSON format instead.
  - To execute it debug mode please use the env_param `PY_ENV=DEV`.
  - If I had time, I would've add some unitests, but as it wasn't required I allowed myself to release this without any.
  - Last point, Personally I would've store it in a collection base(NOSQL);
