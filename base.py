@@ -1,3 +1,4 @@
+import asyncio
 import logging
 
 from utils import CSV, DEBUG
@@ -37,7 +38,7 @@ class Merger:
             self._logging.info(message)
             print(message)
 
-    def __map_customers_orders__(self):
+    async def __map_customers_orders__(self):
         """
         Creates a dictionary for the customers orders
         :return: Mapped version of the first data source
@@ -53,7 +54,7 @@ class Merger:
         self.__logger__('debug', mapped)
         return mapped
 
-    def __map_orders_barcodes__(self):
+    async def __map_orders_barcodes__(self):
         """
         Creates a dictionary for what orders used what barcodes based on the barcodes data source.
         In addition catch all empty barcodes, not used barcodes and barcodes that been repeated.
@@ -114,6 +115,9 @@ class Merger:
         self.__logger__('debug', final)
         return final
 
+    async def __get_data_sources__(self):
+        return await asyncio.gather(self.__map_customers_orders__(), self.__map_orders_barcodes__())
+
     def execute(self, top=False, output_filename='result', json=False):
         """
         The executor
@@ -124,7 +128,7 @@ class Merger:
         """
 
         self.__logger__('info', "Let's do this!")
-        mapped_orders, mapped_barcodes = self.__map_customers_orders__(), self.__map_orders_barcodes__()
+        mapped_orders, mapped_barcodes = asyncio.run(self.__get_data_sources__())
         merged = self.__merge_it__(mapped_orders, mapped_barcodes)
 
         if top:
